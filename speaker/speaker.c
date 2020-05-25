@@ -1,5 +1,5 @@
 #include <8051.h>
-#define period 15536
+#define period 5536
 #define max 9999
 __bit bInc = 0; //記錄起來，等離開就刪除（設為0)
 static __bit bEven =1;
@@ -12,7 +12,7 @@ void delay(){
 }
 
 void timer0_ISR(void) __interrupt(1) __using(1){
-    //TMOD = 0x01
+    //TMOD = 0x01;
     TH0 = period >> 8;    
     TL0 = period & 0xff; 
     
@@ -24,8 +24,9 @@ void timer0_ISR(void) __interrupt(1) __using(1){
     }
 }
 
-void seg(unsigned *s){
-    unsigned seg[]={0xfc,0x60,0xDA,0xF2,0x66,0xB6,0x3E,0xE0,0xFE,0xF6};
+void seg(unsigned *s)
+    constant song[]= {3,3,3,3,2,1,1,7,6,6,1,3,6,6,6,6,5,4}
+    
 
     for (int i=0; i<4; i++){ 
         P0 = ~(1<<i);
@@ -35,8 +36,10 @@ void seg(unsigned *s){
 }
 void init(){
     TMOD = 0x01; //mode 1 
-    TH0 =  period >> 8;
-    TL0 =  period & 0xff;
+    TH0 = period >> 8;    
+    TL0 = period & 0xff; 
+    // TH0 =  period >> 8;
+    // TL0 =  period & 0xff;
     EA=1;  //interrupt enable
     ET0=1; //timer0 interrupt enable
     TR0=1;  //timer0 start
